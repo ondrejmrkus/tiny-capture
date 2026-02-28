@@ -15,7 +15,7 @@ const ICONS = {
 // Ghost SVG fallback
 const GHOST_SVG = `data:image/svg+xml,${encodeURIComponent('<svg viewBox="0 0 200 260" xmlns="http://www.w3.org/2000/svg"><path d="M40 260L40 100Q40 20 100 20Q160 20 160 100L160 260L143 235L126 260L109 235L91 260L74 235Z" fill="#E8E0F0" stroke="#C8C0D8" stroke-width="2"/><circle cx="78" cy="95" r="10" fill="#2a2a4a"/><circle cx="122" cy="95" r="10" fill="#2a2a4a"/><circle cx="81" cy="98" r="3" fill="#fff"/><circle cx="125" cy="98" r="3" fill="#fff"/><ellipse cx="100" cy="128" rx="7" ry="5" fill="#2a2a4a"/><circle cx="62" cy="115" r="10" fill="#FFB6C1" opacity="0.4"/><circle cx="138" cy="115" r="10" fill="#FFB6C1" opacity="0.4"/></svg>')}`;
 
-const LOGO_SVG = `data:image/svg+xml,${encodeURIComponent('<svg viewBox="0 0 200 60" xmlns="http://www.w3.org/2000/svg"><text x="100" y="45" text-anchor="middle" font-family="Arial,sans-serif" font-size="48" font-weight="900" fill="#14b8a6" letter-spacing="-2">tiny</text></svg>')}`;
+const LOGO_SVG = `data:image/svg+xml,${encodeURIComponent('<svg viewBox="0 0 200 60" xmlns="http://www.w3.org/2000/svg"><text x="100" y="45" text-anchor="middle" font-family="Arial,sans-serif" font-size="48" font-weight="900" fill="#7C6D9A" letter-spacing="-2">tiny</text></svg>')}`;
 
 // ==================== DATA ====================
 const CLASSES = [
@@ -288,6 +288,13 @@ function renderCapture() {
     const cls = CLASSES.find(c => c.id === state.currentClassId);
     const students = getStudentsByClass(state.currentClassId);
     const cols = students.length <= 16 ? 2 : 3;
+    const rows = Math.ceil(students.length / cols);
+
+    // Size class based on student count
+    let sizeClass = 'grid-normal';
+    if (students.length <= 8) sizeClass = 'grid-spacious';
+    else if (students.length >= 25) sizeClass = 'grid-dense';
+    else if (students.length >= 17) sizeClass = 'grid-compact';
 
     const tiles = students.map(s => {
         const selected = state.selectedStudents.has(s.id);
@@ -305,7 +312,7 @@ function renderCapture() {
             <div class="capture-header">
                 <h2>${cls ? cls.name : ''} — Sbírání důkazů</h2>
             </div>
-            <div class="student-grid cols-${cols}" id="student-grid">
+            <div class="student-grid cols-${cols} ${sizeClass}" id="student-grid" style="grid-template-rows: repeat(${rows}, 1fr)">
                 ${tiles}
             </div>
             <div class="capture-footer">
