@@ -640,7 +640,7 @@ function renderStudentList() {
         const count = getStudentEvidenceCount(s.id);
         return `
             <button class="student-list-item" data-student-id="${s.id}">
-                <div>
+                <div class="student-list-info">
                     <div class="student-list-name">${s.firstName} ${s.lastName}</div>
                     <div class="student-list-class">${cls ? cls.name : ''}</div>
                 </div>
