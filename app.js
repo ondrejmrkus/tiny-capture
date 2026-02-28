@@ -109,7 +109,8 @@ const STUDENTS = [
     { id: 74, firstName: 'Tomáš', lastName: 'Kučera', classId: '8a' },
 ];
 
-const SENTENCES = ['Čau', 'Mám rád tmu', 'Zhasni prosím', 'Vyber si tlačítko'];
+// Loaded from sentences.txt at init, these are fallback values
+let SENTENCES = ['Čau', 'Mám ráda tmu', 'Zhasni prosím', 'Klikni na tlačítko'];
 
 const SUBJECTS = ['Matematika', 'Čeština', 'Angličtina', 'Přírodopis', 'Dějepis'];
 
@@ -844,6 +845,15 @@ function formatTime(timestamp) {
 }
 
 // ==================== INIT ====================
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+    // Load sentences from file (fall back to hardcoded)
+    try {
+        const res = await fetch('sentences.txt');
+        if (res.ok) {
+            const text = await res.text();
+            const lines = text.split('\n').map(l => l.trim()).filter(Boolean);
+            if (lines.length > 0) SENTENCES = lines;
+        }
+    } catch (e) { /* use fallback */ }
     navigateTo('home');
 });
